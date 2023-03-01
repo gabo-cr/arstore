@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-def catalogo(request):
-    template = 'catalogo/catalogo.html'
+def index(request):
+    template = 'dashboard.html'
     context = {}
     return render(request, template, context)
