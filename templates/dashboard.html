@@ -1,12 +1,24 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.108.0">
     <title>{% block title %}{% endblock %}</title>
+
+    <!-- Favicons -->
+    <meta name="theme-color" content="#712cf9">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
     <!--Fonts-->
     {% block fonts %}{% endblock %}
     <!--Custom css-->
@@ -14,10 +26,33 @@
     <!--Custom JS-->
     {% block scripts %}{% endblock %}
 </head>
-<body>
-    {% block content %}{% endblock %}
 
+<body>
+
+    <header class="navbar navbar-light bg-light flex-md-nowrap shadow-sm">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="{% url 'index' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" height="2.5em" viewBox="0 0 565 140" fill="none"><g clip-path="url(#clip0_110_4593)"><path d="M59.69 106.83C59.69 111.16 59.91 116.05 62.36 119.72H39.91C39.3239 117.965 39.0596 116.119 39.13 114.27H38.91C34.24 119.61 27.46 121.17 20.34 121.17C9.23 121.17 0 115.83 0 103.71C0 85.48 21.34 86.15 32.57 84C35.57 83.44 38.57 82.55 38.57 78.89C38.57 74.99 34.9 73.55 31.35 73.55C24.57 73.55 23.23 77 23.12 79.44H2.67C3 71.37 7 66.59 12.67 63.92C18.34 61.25 25.57 60.58 32.35 60.58C59.91 60.58 59.69 72.03 59.69 83.15V106.83ZM38.57 93.83C35.8014 95.0974 32.8905 96.0274 29.9 96.6C25.01 97.71 22.45 98.93 22.45 102.82C22.45 105.49 25.34 108.16 29.35 108.16C34.35 108.16 38.24 105.16 38.57 99.16V93.83Z" fill="url(#paint0_linear_110_4593)"></path><path d="M63.9099 62H84.9999V71.23H85.2199C88.7799 64.33 93.4499 60.55 101.45 60.55C103.629 60.5674 105.797 60.8665 107.9 61.44V80.93C105.136 79.8728 102.188 79.3798 99.2299 79.48C90.5599 79.48 85.8899 84.59 85.8899 96.93V119.72H63.8899L63.9099 62Z" fill="url(#paint1_linear_110_4593)"></path><path d="M137.06 40.35H159.06V68.25H159.28C163.06 63.81 167.95 60.58 177.28 60.58C187.62 60.58 197.07 66.92 197.07 80.15V119.72H175.07V89.48C175.07 82.82 174.3 78.15 167.85 78.15C164.07 78.15 159.07 80.04 159.07 89.26V119.72H137.07L137.06 40.35Z" fill="url(#paint2_linear_110_4593)"></path><path d="M230.15 121.17C208.47 121.17 198.69 106.83 198.69 90.82C198.69 74.81 208.47 60.58 230.15 60.58C251.83 60.58 261.61 74.81 261.61 90.82C261.61 106.83 251.82 121.17 230.15 121.17ZM230.15 76.59C221.81 76.59 220.7 84.71 220.7 90.82C220.7 96.93 221.81 105.16 230.15 105.16C238.49 105.16 239.6 96.93 239.6 90.82C239.6 84.71 238.49 76.59 230.15 76.59Z" fill="url(#paint3_linear_110_4593)"></path><path d="M263.56 40.35H285.56V119.72H263.56V40.35Z" fill="url(#paint4_linear_110_4593)"></path><path d="M328.28 42.14V68.37H328.05C324.72 63.47 318.83 60.59 312.27 60.59C292.93 60.59 287.7 77.03 287.7 90.59C287.7 105.05 295.6 121.17 311.93 121.17C322.71 121.17 326.05 117.05 328.82 113.39H329.05V119.73H350.29V59.2L328.28 42.14ZM319.37 105.14C311.5 105.14 309.71 97.69 309.71 90.79C309.71 83.89 311.5 76.56 319.37 76.56C327.24 76.56 329.05 84.02 329.05 90.79C329.05 97.56 327.27 105.16 319.37 105.16V105.14Z" fill="url(#paint5_linear_110_4593)"></path><path d="M354.94 62.8V119.73H376.94V79.86L354.94 62.8Z" fill="url(#paint6_linear_110_4593)"></path><path d="M381.49 62H402.72V69.34H403C407.11 63.56 413 60.55 421.78 60.55C432.12 60.55 441.57 66.89 441.57 80.12V119.69H419.57V89.48C419.57 82.82 418.79 78.15 412.35 78.15C408.57 78.15 403.56 80.04 403.56 89.26V119.72H381.56L381.49 62Z" fill="url(#paint7_linear_110_4593)"></path><path d="M505 112.27C505 123.72 502 139.84 475 139.84C461.33 139.84 446.88 136.17 444.88 120.61H466.66C467.014 121.31 467.425 121.979 467.89 122.61C469.22 124.61 471.56 126.83 474.33 126.83C481.45 126.83 483.01 118.39 483.01 113.61V108.27H482.78C481.081 110.791 478.776 112.844 476.076 114.242C473.377 115.64 470.369 116.337 467.33 116.27C450.33 116.27 442.65 103.6 442.65 88.15C442.65 73.15 451.21 60.58 467.65 60.58C474.09 60.58 480.21 63.14 482.76 69.03H483V62H505V112.27ZM474.55 102.16C482.66 102.16 483.55 94.38 483.55 87.93C483.55 81.48 480.41 76.59 474 76.59C467.78 76.59 464.66 81.93 464.66 88.04C464.62 94.6 466.62 102.16 474.52 102.16H474.55Z" fill="url(#paint8_linear_110_4593)"></path><path d="M542.64 78.81C542.584 77.9376 542.324 77.0907 541.879 76.3383C541.434 75.5859 540.818 74.9491 540.08 74.48C538.692 73.3745 536.964 72.7843 535.19 72.81C532.08 72.81 528.52 73.48 528.52 77.26C528.52 78.93 529.86 79.7 531.08 80.26C534.75 81.81 543.08 82.26 550.42 84.71C557.76 87.16 564.2 91.37 564.2 100.82C564.2 116.82 548.86 121.17 534.86 121.17C521.3 121.17 506.4 115.72 506.07 100.82H527.07C527.131 101.813 527.4 102.782 527.86 103.664C528.32 104.546 528.961 105.322 529.74 105.94C530.85 106.94 532.96 107.6 535.63 107.6C538.52 107.6 543.08 106.49 543.08 103.16C543.08 99.83 541.2 98.82 531 97C514.21 94.11 507.43 88.78 507.43 78.89C507.43 64.32 523.11 60.54 534.67 60.54C547.12 60.54 562.12 63.99 562.67 78.77L542.64 78.81Z" fill="url(#paint9_linear_110_4593)"></path><path d="M316.15 28H345.46L353.73 0L363.5 28H390.94L368.77 46.6L377.04 75.17L316.15 28Z" fill="url(#paint10_linear_110_4593)"></path></g><defs><linearGradient id="paint0_linear_110_4593" x1="-9.72" y1="90.87" x2="556.99" y2="90.87" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint1_linear_110_4593" x1="-9.72011" y1="90.15" x2="556.99" y2="90.15" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint2_linear_110_4593" x1="-9.72002" y1="80.04" x2="556.99" y2="80.04" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint3_linear_110_4593" x1="-9.71994" y1="90.87" x2="556.99" y2="90.87" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint4_linear_110_4593" x1="-9.72001" y1="80.04" x2="556.99" y2="80.04" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint5_linear_110_4593" x1="-9.71999" y1="81.65" x2="556.99" y2="81.65" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint6_linear_110_4593" x1="-9.71999" y1="91.26" x2="556.99" y2="91.26" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint7_linear_110_4593" x1="-9.72013" y1="90.15" x2="556.99" y2="90.15" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint8_linear_110_4593" x1="-9.72005" y1="100.21" x2="556.99" y2="100.21" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint9_linear_110_4593" x1="-9.72001" y1="90.87" x2="556.99" y2="90.87" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><linearGradient id="paint10_linear_110_4593" x1="-9.72002" y1="37.58" x2="556.99" y2="37.58" gradientUnits="userSpaceOnUse"><stop stop-color="#0A81C5"></stop><stop offset="0.3" stop-color="#0B78BD"></stop><stop offset="0.8" stop-color="#0C5FA9"></stop><stop offset="1" stop-color="#0D539F"></stop></linearGradient><clipPath id="clip0_110_4593"><rect width="564.2" height="139.84" fill="white"></rect></clipPath></defs></svg>
+        </a>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            {% include "sidebar.html" %}
+            
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+        crossorigin="anonymous"></script>
     <!--Custom JS-->
     {% block footerscripts %}{% endblock %}
 </body>
+
 </html>
