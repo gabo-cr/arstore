@@ -13,13 +13,11 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 def catalogo(request):
     template = 'catalogo/catalogo.html'
+    
     numArticulosDB = Articulo.objects.count()
     numArticulosShopify = countProductsFromShopify()
-    print(f'numArticulosDB: {numArticulosDB}')
-    print(f'numArticulosShopify: {numArticulosShopify}')
     if numArticulosDB < numArticulosShopify:
         loaded = loadAllArticulosFromShopifyToDB()
-        print(loaded)
     
     articulos = Articulo.objects.all()
     

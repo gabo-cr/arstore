@@ -14,3 +14,10 @@ img, .default-image {
 .articulo span {
     font-size: 0.9em;
 }
+.accion {
+    text-decoration: none;
+    display: flex;
+    column-gap: 6px;
+    font-size: 1.1em;
+    align-items: center;
+}

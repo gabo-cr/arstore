@@ -3,6 +3,51 @@
 
 {% block title %}Compras{% endblock %}
 
+{% block styles %}
+<link href="{% static 'css/catalogo.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<h1>Compras</h1>
+<div class="card shadow">
+    <div class="card-body">
+        <h1 class="card-title">Compras</h1>
+        <ul class="list-group">
+        {% for orden in ordenes %}
+            <li class="list-group-item articulo">
+                <div class="container-fluid">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>{{orden.numeroOrden}}</p>
+                            <span>Número de orden</span>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            {% with orden.cliente_set.all|first as cliente %}
+                            <p>{{cliente.nombre}}</p>
+                            {% endwith %}
+                            <span>Cliente</span>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>{{currencySymbol}} {{orden.total}}</p>
+                            <span>Monto</span>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>{{orden.fechaActualizacion|date:'d/m/Y'}}</p>
+                            <span>Fecha de pago</span>
+                        </div>
+                        <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+                            <p>
+                                <a href="{% url 'orden' orden.id %}" class="accion">
+                                    <i class="bi bi-eye-fill"></i>
+                                    <span>Ver orden</span>
+                                </a>
+                            </p>
+                            <span>Acciones</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock %}
