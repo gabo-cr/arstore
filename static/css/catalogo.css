@@ -1,0 +1,16 @@
+img, .default-image {
+    width: 100%;
+    padding: 10px;
+}
+.articulo {
+    padding: 20px 0;
+}
+.articulo p {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 1em;
+    text-align: center;
+}
+.articulo span {
+    font-size: 0.9em;
+}
