@@ -20,7 +20,7 @@ def catalogo(request):
     if numArticulosDB < numArticulosShopify:
         loaded = loadAllArticulosFromShopifyToDB()
     
-    articulos = Articulo.objects.all()
+    articulos = Articulo.objects.all().order_by('-ultimaFechaActualizacion')
     
     context = {
         'articulos': articulos
@@ -34,8 +34,6 @@ def webhookProduct(request):
     if not verified:
         return HttpResponseBadRequest()
 
-    #Handle webhook json response
-    #print(json.loads(data))
     saveProductToDB(json.loads(data))
 
     return HttpResponse()
@@ -69,42 +67,45 @@ def loadAllArticulosFromShopifyToDB():
 
 def saveProductToDB(product):
     try:
+        articulosDB = Articulo.objects.filter(product_id=product['id'])
         imageurl = None if product['image'] is None else product['image']['src']
-        if 'variants' in product:
-            for variant in product['variants']:
-                articulos = Articulo.objects.filter(product_id=variant['id'])
-                print(articulos)
-                if len(articulos) == 0:
-                    articulo, created = Articulo.objects.create(
-                        sku = variant['sku'], 
-                        imagenURI = imageurl,
-                        nombre = product['title'] + ' ' + variant['title'],
-                        cantidad = variant['inventory_quantity'],
-                        fechaRegistro = datetime.fromisoformat(variant['created_at']),
-                        ultimaFechaActualizacion = datetime.fromisoformat(variant['updated_at']),
-                        product_id = variant['id']
-                    )
-                    if created:
-                        articulo.save()
-                        log = LogArticulo.objects.create(
-                            articulo = articulo,
-                            json = json.dumps({'articulo': variant})
-                        )
-                        log.save()
-                else:
-                    articulos[0].sku = variant['sku']
-                    articulos[0].imagenURI = imageurl
-                    articulos[0].nombre = product['title'] + ' ' + variant['title']
-                    articulos[0].cantidad = variant['inventory_quantity']
-                    articulos[0].fechaRegistro = datetime.fromisoformat(variant['created_at'])
-                    articulos[0].ultimaFechaActualizacion = datetime.fromisoformat(variant['updated_at'])
-                    articulos[0].save()
-                    
-                    log = LogArticulo.objects.create(
-                        articulo = articulos[0],
-                        json = json.dumps({'articulo': variant})
-                    )
-                    log.save()
+        
+        cantidad = 0
+        for variant in product['variants']:
+            cantidad += int(variant['inventory_quantity'])
+            sku = str(variant['sku'])
+
+        if len(articulosDB) == 0:
+            articulo, created = Articulo.objects.get_or_create(
+                sku = sku, 
+                imagenURI = imageurl,
+                nombre = product['title'],
+                cantidad = cantidad,
+                fechaRegistro = datetime.fromisoformat(product['created_at']),
+                ultimaFechaActualizacion = datetime.fromisoformat(product['updated_at']),
+                product_id = product['id']
+            )
+            if created:
+                articulo.save()
+                log = LogArticulo.objects.create(
+                    articulo = articulo,
+                    json = json.dumps({'product': json.dumps(product)})
+                )
+                log.save()
+        else:
+            articulosDB[0].sku = sku
+            articulosDB[0].imagenURI = imageurl
+            articulosDB[0].nombre = product['title']
+            articulosDB[0].cantidad = cantidad
+            articulosDB[0].fechaRegistro = datetime.fromisoformat(product['created_at'])
+            articulosDB[0].ultimaFechaActualizacion = datetime.fromisoformat(product['updated_at'])
+            articulosDB[0].save()
+            
+            log = LogArticulo.objects.create(
+                articulo = articulosDB[0],
+                json = json.dumps({'articulo': json.dumps(product)})
+            )
+            log.save()
 
     except Exception as e:
         print(e)
@@ -115,8 +116,7 @@ def countProductsFromShopify():
     count = 0
     try:
         openConnectionToShopify()
-        #count = shopify.Product.count()
-        count = shopify.Variant.count()
+        count = shopify.Product.count()
     except Exception as e:
         print(e)
     finally:
