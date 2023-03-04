@@ -8,11 +8,30 @@
 {% endblock %}
 
 {% block content %}
+<h1 class="title">Artículos</h1>
 <div class="card shadow">
     <div class="card-body">
-        <h1 class="card-title">Artículos</h1>
+    {% if articulos_page %}
         <ul class="list-group">
-        {% for articulo in articulos %}
+            <li class="list-group-item articulo">
+                <div class="container-fluid">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Imagen</p>
+                        </div>
+                        <div class="col-md-5 d-flex flex-column justify-content-center align-items-center">
+                            <p>Descripción</p>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Cantidad</p>
+                        </div>
+                        <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
+                            <p>Última actualización</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% for articulo in articulos_page %}
             <li class="list-group-item articulo">
                 <div class="container-fluid">
                     <div class="row d-flex flex-row align-items-center">
@@ -26,22 +45,48 @@
                             {% endif %}
                         </div>
                         <div class="col-md-5 d-flex flex-column justify-content-center align-items-center">
-                            <p>{{articulo.nombre}}</p>
-                            <span>Descripción</span>
+                            <span>{{articulo.nombre}}</span>
+                            <!--span>Descripción</span-->
                         </div>
                         <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
-                            <p>{{articulo.cantidad}}</p>
-                            <span>Cantidad</span>
+                            <span>{{articulo.cantidad}}</span>
+                            <!--span>Cantidad</span-->
                         </div>
                         <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
-                            <p>{{articulo.ultimaFechaActualizacion|date:'d/m/Y'}}</p>
-                            <span>Última actualización</span>
+                            <span>{{articulo.ultimaFechaActualizacion|date:'d/m/Y'}}</span>
+                            <!--span>Última actualización</span-->
                         </div>
                     </div>
                 </div>
             </li>
-        {% endfor %}
+            {% endfor %}
         </ul>
+        {% if articulos_page.has_other_pages %}
+        <div class="btn-group mt-4" role="group" aria-label="Item pagination">
+            {% if articulos_page.has_previous %}
+                <a href="?page={{ articulos_page.previous_page_number }}" class="btn btn-outline-primary">&laquo;</a>
+            {% endif %}
+
+            {% for page_number in articulos_page.paginator.page_range %}
+                {% if articulos_page.number == page_number %}
+                    <button class="btn btn-outline-primary active">
+                        <span>{{ page_number }}</span>
+                    </button>
+                {% else %}
+                    <a href="?page={{ page_number }}" class="btn btn-outline-primary">
+                        {{ page_number }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if articulos_page.has_next %}
+                <a href="?page={{ articulos_page.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    {% else %}
+        <p>No se encontraron artículos.</p>
+    {% endif %}
     </div>
 </div>
 {% endblock %}

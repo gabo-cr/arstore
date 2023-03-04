@@ -6,6 +6,7 @@ from .models import Articulo, LogArticulo
 from datetime import datetime
 from django.http import HttpResponse, HttpResponseBadRequest 
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 #environ init
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,6 +15,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 def catalogo(request):
     template = 'catalogo/catalogo.html'
+    
+    default_page = 1
+    page = request.GET.get('page', default_page)
 
     numArticulosDB = Articulo.objects.count()
     numArticulosShopify = countProductsFromShopify()
@@ -21,9 +25,19 @@ def catalogo(request):
         loaded = loadAllArticulosFromShopifyToDB()
     
     articulos = Articulo.objects.all().order_by('-ultimaFechaActualizacion')
+    articulos_per_page = 5
+    paginator = Paginator(articulos, articulos_per_page)
+
+    try:
+        articulos_page = paginator.page(page)
+    except PageNotAnInteger:
+        articulos_page = paginator.page(default_page)
+    except EmptyPage:
+        articulos_page = paginator.page(paginator.num_pages)
     
     context = {
-        'articulos': articulos
+        #'articulos': articulos,
+        'articulos_page': articulos_page
     }
     return render(request, template, context)
 
