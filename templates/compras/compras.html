@@ -8,31 +8,53 @@
 {% endblock %}
 
 {% block content %}
+<h1 class="title">Compras</h1>
+<p class="description">Historial de órdenes pagadas ({{totalOrdenes}} en total)</p>
 <div class="card shadow">
     <div class="card-body">
-        <h1 class="card-title">Compras</h1>
         <ul class="list-group">
+            <li class="list-group-item articulo heading">
+                <div class="container-fluid">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Número de orden</p>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Cliente</p>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Monto ({{currencySymbol}})</p>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Última actualización</p>
+                        </div>
+                        <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+                            <p>Acciones</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
         {% for orden in ordenes %}
             <li class="list-group-item articulo">
                 <div class="container-fluid">
                     <div class="row d-flex flex-row align-items-center">
                         <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
-                            <p>{{orden.numeroOrden}}</p>
-                            <span>Número de orden</span>
+                            <span>{{orden.numeroOrden}}</span>
                         </div>
                         <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
                             {% with orden.cliente_set.all|first as cliente %}
-                            <p>{{cliente.nombre}}</p>
+                            {% if cliente.nombre == '' %}
+                            <span>-</span>
+                            {% else %}
+                            <span>{{cliente.nombre}}</span>
+                            {% endif %}
                             {% endwith %}
-                            <span>Cliente</span>
                         </div>
                         <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
-                            <p>{{currencySymbol}} {{orden.total}}</p>
-                            <span>Monto</span>
+                            <span>{{currencySymbol}} {{orden.total|floatformat:"2g"}}</span>
                         </div>
                         <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
-                            <p>{{orden.fechaActualizacion|date:'d/m/Y'}}</p>
-                            <span>Fecha de pago</span>
+                            <span>{{orden.fechaActualizacion|date:'d/m/Y'}}</span>
                         </div>
                         <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
                             <p>
@@ -41,7 +63,6 @@
                                     <span>Ver orden</span>
                                 </a>
                             </p>
-                            <span>Acciones</span>
                         </div>
                     </div>
                 </div>
