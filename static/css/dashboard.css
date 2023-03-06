@@ -5230,9 +5230,10 @@ fieldset:disabled .btn {
 }
 
 .card-footer {
-    padding: 0.5rem 1rem;
-    background-color: rgba(0, 0, 0, 0.03);
-    border-top: 1px solid rgba(0, 0, 0, 0.125);
+    padding: 2rem 1rem 1rem;
+    background-color: #fff;
+    border: none;
+    text-align: right;
 }
 
 .card-footer:last-child {

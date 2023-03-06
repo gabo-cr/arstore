@@ -40,3 +40,15 @@ img, .default-image {
     font-size: 1.1em;
     align-items: center;
 }
+.back-btn {
+    margin: 10px 20px 20px;
+}
+.card-footer .footer-total {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+.card-footer .footer-extra {
+    display: block;
+    font-size: 0.9em;
+    font-weight: normal;
+}

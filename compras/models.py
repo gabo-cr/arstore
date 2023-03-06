@@ -20,6 +20,7 @@ class Detalle(models.Model):
     precio = models.TextField(null=False)
     total = models.TextField(null=False)
     product_id = models.CharField(null=True, max_length=50)
+    imagenURI = models.TextField(null=True)
 
     def __str__(self):
         return self.encabezado.numeroOrden

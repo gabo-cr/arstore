@@ -3,6 +3,72 @@
 
 {% block title %}Orden{% endblock %}
 
+{% block styles %}
+<link href="{% static 'css/catalogo.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<h1>Orden #{{orden}}</h1>
+<h1 class="title">Orden {{orden.numeroOrden}}</h1>
+<p class="description">Detalles de la orden</p>
+<div class="card shadow">
+    <div class="card-body">
+        <ul class="list-group">
+            <li class="list-group-item articulo heading">
+                <div class="container-fluid">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Imagen</p>
+                        </div>
+                        <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+                            <p>Descripción</p>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Cantidad</p>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Precio</p>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <p>Total</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% for detalle in detalles %}
+            <li class="list-group-item articulo">
+                <div class="container-fluid">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            {% if detalle.imagenURI %}
+                            <img src="{{detalle.imagenURI}}" alt="">
+                            {% else %}
+                            <div class="default-image">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="2em" width="100%" viewBox="0 0 198 50" fill="none"><g clip-path="url(#clip0_693_4884)"><path d="M20.9476 37.9333C20.9476 39.4505 21.0248 41.1639 21.8846 42.4499H14.006C13.8003 41.835 13.7076 41.1881 13.7323 40.5402H13.6551C12.0162 42.4114 9.6368 42.958 7.13811 42.958C3.23917 42.958 0 41.0869 0 36.84C0 30.4522 7.48905 30.687 11.4301 29.9336C12.4829 29.7374 13.5357 29.4255 13.5357 28.1431C13.5357 26.7765 12.2478 26.2719 11.0019 26.2719C8.62258 26.2719 8.15232 27.4808 8.11372 28.3358H0.937008C1.05282 25.5081 2.45658 23.8331 4.4464 22.8976C6.43623 21.962 8.97352 21.7272 11.3529 21.7272C21.0248 21.7272 20.9476 25.7393 20.9476 29.6358V37.9333ZM13.5357 33.378C12.5641 33.8221 11.5426 34.148 10.4931 34.3487C8.77699 34.7376 7.87859 35.1651 7.87859 36.5281C7.87859 37.4637 8.8928 38.3993 10.3001 38.3993C12.0548 38.3993 13.4199 37.3481 13.5357 35.2457V33.378Z" fill="#B2B2B2"></path><path d="M22.4286 22.2248H29.83V25.459H29.9072C31.1565 23.0413 32.7954 21.7167 35.6029 21.7167C36.3677 21.7228 37.1286 21.8277 37.8665 22.0286V28.8579C36.8964 28.4875 35.8618 28.3147 34.8238 28.3498C31.7812 28.3498 30.1423 30.1404 30.1423 34.4643V42.4499H22.4216L22.4286 22.2248Z" fill="#B2B2B2"></path><path d="M48.0999 14.6387H55.8205V24.4148H55.8977C57.2243 22.8591 58.9404 21.7273 62.2146 21.7273C65.8433 21.7273 69.1597 23.9488 69.1597 28.5846V42.45H61.4391V31.8538C61.4391 29.5202 61.1688 27.8838 58.9053 27.8838C57.5787 27.8838 55.824 28.5461 55.824 31.7768V42.45H48.1034L48.0999 14.6387Z" fill="#B2B2B2"></path><path d="M80.7687 42.958C73.1603 42.958 69.7281 37.9333 69.7281 32.3233C69.7281 26.7134 73.1603 21.7272 80.7687 21.7272C88.3771 21.7272 91.8092 26.7134 91.8092 32.3233C91.8092 37.9333 88.3736 42.958 80.7687 42.958ZM80.7687 27.3371C77.8419 27.3371 77.4523 30.1824 77.4523 32.3233C77.4523 34.4643 77.8419 37.3481 80.7687 37.3481C83.6955 37.3481 84.0851 34.4643 84.0851 32.3233C84.0851 30.1824 83.6955 27.3371 80.7687 27.3371Z" fill="#B2B2B2"></path><path d="M92.4935 14.6387H100.214V42.45H92.4935V14.6387Z" fill="#B2B2B2"></path><path d="M115.206 15.2659V24.4569H115.126C113.957 22.7399 111.89 21.7308 109.588 21.7308C102.801 21.7308 100.965 27.4913 100.965 32.2428C100.965 37.3096 103.738 42.958 109.468 42.958C113.252 42.958 114.424 41.5144 115.396 40.2319H115.477V42.4534H122.931V21.2437L115.206 15.2659ZM112.079 37.3411C109.318 37.3411 108.689 34.7306 108.689 32.3129C108.689 29.8951 109.318 27.3267 112.079 27.3267C114.841 27.3267 115.477 29.9406 115.477 32.3129C115.477 34.6851 114.852 37.3481 112.079 37.3481V37.3411Z" fill="#B2B2B2"></path><path d="M124.562 22.5051V42.4534H132.283V28.483L124.562 22.5051Z" fill="#B2B2B2"></path><path d="M133.88 22.2248H141.33V24.7968H141.429C142.871 22.7714 144.938 21.7167 148.019 21.7167C151.648 21.7167 154.964 23.9383 154.964 28.5741V42.4394H147.244V31.8538C147.244 29.5202 146.97 27.8838 144.71 27.8838C143.383 27.8838 141.625 28.546 141.625 31.7767V42.4499H133.904L133.88 22.2248Z" fill="#B2B2B2"></path><path d="M177.224 39.8394C177.224 43.8515 176.172 49.5 166.696 49.5C161.899 49.5 156.828 48.214 156.126 42.7618H163.769C163.893 43.0069 164.038 43.2413 164.201 43.4626C164.668 44.1634 165.489 44.9413 166.461 44.9413C168.96 44.9413 169.507 41.9839 169.507 40.309V38.4378H169.426C168.83 39.3211 168.021 40.0406 167.074 40.5304C166.126 41.0202 165.071 41.2645 164.004 41.241C158.038 41.241 155.343 36.8015 155.343 31.3878C155.343 26.1318 158.347 21.7272 164.117 21.7272C166.377 21.7272 168.525 22.6243 169.419 24.6881H169.504V22.2248H177.224V39.8394ZM166.538 36.2969C169.384 36.2969 169.697 33.5708 169.697 31.3107C169.697 29.0506 168.595 27.3371 166.345 27.3371C164.162 27.3371 163.067 29.2083 163.067 31.3492C163.053 33.6479 163.755 36.2969 166.528 36.2969H166.538Z" fill="#B2B2B2"></path><path d="M190.434 28.1151C190.414 27.8094 190.323 27.5127 190.167 27.249C190.01 26.9853 189.794 26.7622 189.535 26.5978C189.048 26.2105 188.442 26.0037 187.819 26.0127C186.728 26.0127 185.478 26.2474 185.478 27.572C185.478 28.1571 185.949 28.4269 186.377 28.6232C187.665 29.1663 190.588 29.324 193.164 30.1824C195.74 31.0409 198 32.5161 198 35.8274C198 41.4338 192.617 42.958 187.703 42.958C182.945 42.958 177.716 41.0484 177.6 35.8274H184.97C184.991 36.1753 185.085 36.5149 185.247 36.824C185.408 37.1331 185.633 37.4048 185.907 37.6214C186.296 37.9718 187.037 38.2031 187.974 38.2031C188.988 38.2031 190.588 37.8142 190.588 36.6473C190.588 35.4805 189.928 35.1266 186.349 34.4889C180.456 33.4762 178.077 31.6086 178.077 28.1431C178.077 23.0378 183.58 21.7133 187.637 21.7133C192.006 21.7133 197.27 22.9221 197.463 28.1011L190.434 28.1151Z" fill="#B2B2B2"></path><path d="M110.949 10.3112H121.235L124.138 0.5L127.566 10.3112H137.196L129.416 16.8287L132.318 26.8396L110.949 10.3112Z" fill="#B2B2B2"></path></g><defs><clipPath id="clip0_693_4884"><rect width="198" height="49" fill="white" transform="translate(0 0.5)"></rect></clipPath></defs></svg>    
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+                            <span>{{detalle.nombre}}</span>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <span>{{detalle.cantidad}}</span>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <span>{{currencySymbol}} {{detalle.precio|floatformat:"2g"}}</span>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                            <span>{{currencySymbol}} {{detalle.total|floatformat:"2g"}}</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="card-footer">
+            <span class="footer-total">Total:  {{currencySymbol}} {{orden.total|floatformat:"2g"}}</span>
+            <span class="footer-extra">(con impuestos)</span>
+        </div>
+    </div>
+</div>
+<input type="button" value="Volver a Compras" class="btn btn-outline-secondary back-btn" onClick="javascript:history.go(-1);">
 {% endblock %}

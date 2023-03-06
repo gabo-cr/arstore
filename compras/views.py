@@ -2,6 +2,7 @@ import os, environ, base64, hashlib, hmac, json
 from pathlib import Path
 from django.shortcuts import render
 import shopify
+from catalogo.models import Articulo
 from .models import Encabezado, Detalle, Cliente
 from datetime import datetime
 from currency_symbols import CurrencySymbols
@@ -46,10 +47,23 @@ def compras(request):
 
     return render(request, template, context)
 
-def orden(request, orden):
+def orden(request, idOrden):
     template = 'compras/orden.html'
+
+    orden = None
+    detalles = []
+    currencySymbol = ''
+    try:
+        orden = Encabezado.objects.get(id=idOrden)
+        detalles = Detalle.objects.filter(encabezado=orden)
+        currencySymbol = CurrencySymbols.get_symbol(str(orden.moneda))
+    except Exception as e:
+        print(f'Exception in orden: {e}')
+
     context = {
-        'orden': orden
+        'orden': orden,
+        'detalles': detalles,
+        'currencySymbol': currencySymbol
     }
     return render(request, template, context)
 
@@ -70,10 +84,6 @@ def verifyWebhook(data, hmac_header):
 
     return hmac.compare_digest(computed_hmac, hmac_header.encode('utf-8'))
 
-def loadAllOrdenesFromDB():
-    ordenes = Encabezado.objects.all()
-    return ordenes
-
 def loadAllOrdenesFromShopifyToDB():
     try:
         openConnectionToShopify()
@@ -84,7 +94,7 @@ def loadAllOrdenesFromShopifyToDB():
             saveOrderToDB(o)
             
     except Exception as e:
-        print(e)
+        print(f'Exception in loadAllOrdenesFromShopifyToDB: {e}')
         return False
     finally:
         closeConnectionToShopify()
@@ -130,6 +140,14 @@ def saveOrderToDB(orden):
 
                 # Save items in detalle
                 for item in orden['line_items']:
+                    imagenURI = None
+                    if item['product_id'] is not None:
+                        articulo = Articulo.objects.filter(product_id=item['product_id'])
+                        imagenURI = articulo[0].imagenURI if len(articulo) > 0 else None
+                    elif item['sku'] is not None:
+                        articulo = Articulo.objects.filter(sku=item['product_id'])
+                        imagenURI = articulo[0].imagenURI if len(articulo) > 0 else None
+
                     detalle = Detalle.objects.create(
                         encabezado = nuevaOrden,
                         sku = item['sku'],
@@ -137,12 +155,13 @@ def saveOrderToDB(orden):
                         cantidad = item['quantity'],
                         precio = item['price'],
                         total = float(item['price']) * float(item['quantity']),
-                        product_id = item['product_id']
+                        product_id = item['product_id'],
+                        imagenURI = imagenURI
                     )
                     detalle.save()
 
     except Exception as e:
-        print(e)
+        print(f'Exception in saveOrderToDB: {e}')
         return False
     return True
 
@@ -152,7 +171,7 @@ def countOrdersFromShopify():
         openConnectionToShopify()
         count = shopify.Order.count(financial_status='paid')
     except Exception as e:
-        print(e)
+        print(f'Exception in countOrdersFromShopify: {e}')
     finally:
         closeConnectionToShopify()
     return count
