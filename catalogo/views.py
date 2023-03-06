@@ -37,7 +37,8 @@ def catalogo(request):
     
     context = {
         #'articulos': articulos,
-        'articulos_page': articulos_page
+        'articulos_page': articulos_page,
+        'totalArticulos': len(articulos)
     }
     return render(request, template, context)
 

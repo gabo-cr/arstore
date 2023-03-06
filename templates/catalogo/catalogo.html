@@ -9,11 +9,12 @@
 
 {% block content %}
 <h1 class="title">Artículos</h1>
+<p class="description">Catálogo de artículos registrados en la tienda ({{totalArticulos}} en total)</p>
 <div class="card shadow">
     <div class="card-body">
     {% if articulos_page %}
         <ul class="list-group">
-            <li class="list-group-item articulo">
+            <li class="list-group-item articulo heading">
                 <div class="container-fluid">
                     <div class="row d-flex flex-row align-items-center">
                         <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
