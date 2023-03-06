@@ -118,17 +118,17 @@ def saveOrderToDB(orden):
                 nuevaOrden.save()
                 # Save cliente
                 nombre, telefono, correo, direccion = '', '', '', ''
-                if 'customer' in orden:
-                    nombre = (orden['customer']['first_name'] if orden['customer']['first_name'] is not None else '') + (orden['customer']['last_name'] if orden['customer']['last_name'] is not None else '')
+                if 'customer' in orden and orden['customer'] is not None:
+                    nombre = (orden['customer']['first_name'] if orden['customer']['first_name'] is not None else '') + ' ' +  (orden['customer']['last_name'] if orden['customer']['last_name'] is not None else '')
                     telefono = orden['billing_address']['phone'] if orden['billing_address']['phone'] is not None  else ''
                     correo = orden['customer']['email'] if orden['customer']['email'] is not None else ''
                     direccion = orden['customer']['default_address']['address1'] if orden['customer']['default_address'] is not None else ''
-                if 'billing_address' in orden:
-                    nombre = orden['billing_address']['name'] if nombre == '' and orden['billing_address']['name'] is not None else ''
-                    telefono = orden['billing_address']['phone'] if telefono == '' and orden['billing_address']['phone'] is not None else ''
+                if 'billing_address' in orden and orden['billing_address'] is not None:
+                    nombre = orden['billing_address']['name'] if nombre == '' and orden['billing_address']['name'] is not None else nombre
+                    telefono = orden['billing_address']['phone'] if telefono == '' and orden['billing_address']['phone'] is not None else telefono
                     if direccion == '' or direccion is None:
                         direccion = str(orden['billing_address']['address1'] or '') + str(orden['billing_address']['address2'] or '')
-
+                
                 cliente = Cliente.objects.create(
                     encabezado = nuevaOrden,
                     nombre = nombre,

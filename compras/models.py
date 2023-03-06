@@ -27,10 +27,10 @@ class Detalle(models.Model):
 
 class Cliente(models.Model):
     encabezado = models.ForeignKey(Encabezado, on_delete=models.CASCADE)
-    nombre = models.TextField(blank=False, null=False)
-    telefono = models.TextField(blank=False, null=False)
-    correo = models.TextField(blank=False, null=False)
-    direccion = models.TextField(blank=False, null=False)
+    nombre = models.TextField(blank=False, null=False, default='')
+    telefono = models.TextField(blank=False, null=False, default='')
+    correo = models.TextField(blank=False, null=False, default='')
+    direccion = models.TextField(blank=False, null=False, default='')
 
     def __str__(self):
         return self.encabezado.numeroOrden
