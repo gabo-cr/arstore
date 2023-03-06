@@ -7,6 +7,7 @@ from datetime import datetime
 from currency_symbols import CurrencySymbols
 from django.http import HttpResponse, HttpResponseBadRequest 
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 #environ init
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,17 +17,29 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 def compras(request):
     template = 'compras/compras.html'
 
+    default_page = 1
+    page = request.GET.get('page', default_page)
+
     numOrdenesDB = Encabezado.objects.count()
     numOrdenesShopify = countOrdersFromShopify()
-    print(f'numOrdenesDB: {numOrdenesDB}')
-    print(f'numOrdenesShopify: {numOrdenesShopify}')
     if numOrdenesDB < numOrdenesShopify:
         loaded = loadAllOrdenesFromShopifyToDB()
     
-    ordenes = Encabezado.objects.all()
+    ordenes = Encabezado.objects.all().order_by('-numeroOrden')
+    ordenes_per_page = 10
+    paginator = Paginator(ordenes, ordenes_per_page)
+    
+    try:
+        ordenes_page = paginator.page(page)
+    except PageNotAnInteger:
+        ordenes_page = paginator.page(default_page)
+    except EmptyPage:
+        ordenes_page = paginator.page(paginator.num_pages)
+
     currencySymbol = CurrencySymbols.get_symbol(str(ordenes[0].moneda))
+
     context = {
-        'ordenes': ordenes,
+        'ordenes_page': ordenes_page,
         'currencySymbol': currencySymbol,
         'totalOrdenes': len(ordenes)
     }

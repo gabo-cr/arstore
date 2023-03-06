@@ -12,6 +12,7 @@
 <p class="description">Historial de órdenes pagadas ({{totalOrdenes}} en total)</p>
 <div class="card shadow">
     <div class="card-body">
+    {% if ordenes_page %}
         <ul class="list-group">
             <li class="list-group-item articulo heading">
                 <div class="container-fluid">
@@ -34,7 +35,7 @@
                     </div>
                 </div>
             </li>
-        {% for orden in ordenes %}
+            {% for orden in ordenes_page %}
             <li class="list-group-item articulo">
                 <div class="container-fluid">
                     <div class="row d-flex flex-row align-items-center">
@@ -67,8 +68,34 @@
                     </div>
                 </div>
             </li>
-        {% endfor %}
+            {% endfor %}
         </ul>
+        {% if ordenes_page.has_other_pages %}
+        <div class="btn-group mt-4" role="group" aria-label="Item pagination">
+            {% if ordenes_page.has_previous %}
+                <a href="?page={{ ordenes_page.previous_page_number }}" class="btn btn-outline-primary">&laquo;</a>
+            {% endif %}
+
+            {% for page_number in ordenes_page.paginator.page_range %}
+                {% if ordenes_page.number == page_number %}
+                    <button class="btn btn-outline-primary active">
+                        <span>{{ page_number }}</span>
+                    </button>
+                {% else %}
+                    <a href="?page={{ page_number }}" class="btn btn-outline-primary">
+                        {{ page_number }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if ordenes_page.has_next %}
+                <a href="?page={{ ordenes_page.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    {% else %}
+        <p>No se encontraron órdenes pagadas.</p>
+    {% endif %}
     </div>
 </div>
 {% endblock %}

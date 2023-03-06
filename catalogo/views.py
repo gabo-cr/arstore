@@ -36,7 +36,6 @@ def catalogo(request):
         articulos_page = paginator.page(paginator.num_pages)
     
     context = {
-        #'articulos': articulos,
         'articulos_page': articulos_page,
         'totalArticulos': len(articulos)
     }
