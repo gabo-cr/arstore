@@ -6,6 +6,10 @@
     font-size: 2rem;
     margin: 30px 20px 10px;
 }
+.subtitle {
+    font-size: 1.3em;
+    font-weight: 500;
+}
 .description {
     margin: 0 20px 10px;
 }

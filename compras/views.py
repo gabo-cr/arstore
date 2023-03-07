@@ -55,6 +55,7 @@ def orden(request, idOrden):
     currencySymbol = ''
     try:
         orden = Encabezado.objects.get(id=idOrden)
+        cliente = Cliente.objects.get(encabezado=orden)
         detalles = Detalle.objects.filter(encabezado=orden)
         currencySymbol = CurrencySymbols.get_symbol(str(orden.moneda))
     except Exception as e:
@@ -62,6 +63,7 @@ def orden(request, idOrden):
 
     context = {
         'orden': orden,
+        'cliente': cliente,
         'detalles': detalles,
         'currencySymbol': currencySymbol
     }

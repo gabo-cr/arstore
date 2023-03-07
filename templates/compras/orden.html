@@ -12,6 +12,7 @@
 <p class="description">Detalles de la orden</p>
 <div class="card shadow">
     <div class="card-body">
+        <div class="subtitle mb-3">Artículos</div>
         <ul class="list-group">
             <li class="list-group-item articulo heading">
                 <div class="container-fluid">
@@ -66,9 +67,80 @@
         </ul>
         <div class="card-footer">
             <span class="footer-total">Total:  {{currencySymbol}} {{orden.total|floatformat:"2g"}}</span>
-            <span class="footer-extra">(con impuestos)</span>
+            <span class="footer-extra">(incluido impuestos)</span>
         </div>
     </div>
+    {% if cliente.nombre != '' or cliente.telefono != '' or cliente.correo != '' or cliente.direccion != '' %}
+    <div class="card-body">
+        <div class="subtitle mb-3">Cliente</div>
+        <ul class="list-group">
+            <li class="list-group-item articulo">
+                <div class="container-fluid">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col-md-7 d-flex flex-column justify-content-center align-items-start">
+                            <p>Nombre</p>
+                        </div>
+                        <div class="col-md-5 d-flex flex-column justify-content-center align-items-end">
+                            {% if cliente.nombre == '' %}
+                            <span>-</span>
+                            {% else %}
+                            <span>{{cliente.nombre}}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item articulo">
+                <div class="container-fluid">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col-md-7 d-flex flex-column justify-content-center align-items-start">
+                            <p>Teléfono</p>
+                        </div>
+                        <div class="col-md-5 d-flex flex-column justify-content-center align-items-end">
+                            {% if cliente.telefono == '' %}
+                            <span>-</span>
+                            {% else %}
+                            <span>{{cliente.telefono}}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item articulo">
+                <div class="container-fluid">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col-md-7 d-flex flex-column justify-content-center align-items-start">
+                            <p>E-mail</p>
+                        </div>
+                        <div class="col-md-5 d-flex flex-column justify-content-center align-items-end">
+                            {% if cliente.correo == '' %}
+                            <span>-</span>
+                            {% else %}
+                            <span>{{cliente.correo}}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item articulo">
+                <div class="container-fluid">
+                    <div class="row d-flex flex-row align-items-center">
+                        <div class="col-md-7 d-flex flex-column justify-content-center align-items-start">
+                            <p>Dirección</p>
+                        </div>
+                        <div class="col-md-5 d-flex flex-column justify-content-center align-items-end">
+                            {% if cliente.direccion == '' %}
+                            <span>-</span>
+                            {% else %}
+                            <span>{{cliente.direccion}}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
 </div>
 <input type="button" value="Volver a Compras" class="btn btn-outline-secondary back-btn" onClick="javascript:history.go(-1);">
 {% endblock %}
