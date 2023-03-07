@@ -39,7 +39,7 @@
             <li class="list-group-item articulo">
                 <div class="container-fluid">
                     <div class="row d-flex flex-row align-items-center">
-                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-sm-12 col-md-2 d-flex flex-column justify-content-center align-items-center content-small">
                             {% if detalle.imagenURI %}
                             <img src="{{detalle.imagenURI}}" alt="">
                             {% else %}
@@ -48,16 +48,28 @@
                             </div>
                             {% endif %}
                         </div>
-                        <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-sm-12 d-flex flex-column justify-content-center align-items-start label-small">
+                            <p>Descripción:</p>
+                        </div>
+                        <div class="col-sm-12 col-md-4 d-flex flex-column justify-content-center align-items-center content-small">
                             <span>{{detalle.nombre}}</span>
                         </div>
-                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-sm-12 d-flex flex-column justify-content-center align-items-start label-small">
+                            <p>Cantidad:</p>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center content-small">
                             <span>{{detalle.cantidad}}</span>
                         </div>
-                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-sm-12 d-flex flex-column justify-content-center align-items-start label-small">
+                            <p>Precio:</p>
+                        </div>
+                        <div class="col-sm-12 col-md-2 d-flex flex-column justify-content-center align-items-center content-small">
                             <span>{{currencySymbol}} {{detalle.precio|floatformat:"2g"}}</span>
                         </div>
-                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-sm-12 d-flex flex-column justify-content-center align-items-start label-small">
+                            <p>Total:</p>
+                        </div>
+                        <div class="col-sm-12 col-md-2 d-flex flex-column justify-content-center align-items-center content-small">
                             <span>{{currencySymbol}} {{detalle.total|floatformat:"2g"}}</span>
                         </div>
                     </div>
@@ -77,10 +89,10 @@
             <li class="list-group-item articulo">
                 <div class="container-fluid">
                     <div class="row d-flex flex-row align-items-center">
-                        <div class="col-md-7 d-flex flex-column justify-content-center align-items-start">
-                            <p>Nombre</p>
+                        <div class="col-sm-12 col-md-7 d-flex flex-column justify-content-center align-items-start">
+                            <p>Nombre:</p>
                         </div>
-                        <div class="col-md-5 d-flex flex-column justify-content-center align-items-end">
+                        <div class="col-sm-12 col-md-5 d-flex flex-column justify-content-center align-items-end content-small">
                             {% if cliente.nombre == '' %}
                             <span>-</span>
                             {% else %}
@@ -93,10 +105,10 @@
             <li class="list-group-item articulo">
                 <div class="container-fluid">
                     <div class="row d-flex flex-row align-items-center">
-                        <div class="col-md-7 d-flex flex-column justify-content-center align-items-start">
-                            <p>Teléfono</p>
+                        <div class="col-sm-12 col-md-7 d-flex flex-column justify-content-center align-items-start">
+                            <p>Teléfono:</p>
                         </div>
-                        <div class="col-md-5 d-flex flex-column justify-content-center align-items-end">
+                        <div class="col-sm-12 col-md-5 d-flex flex-column justify-content-center align-items-end content-small">
                             {% if cliente.telefono == '' %}
                             <span>-</span>
                             {% else %}
@@ -109,10 +121,10 @@
             <li class="list-group-item articulo">
                 <div class="container-fluid">
                     <div class="row d-flex flex-row align-items-center">
-                        <div class="col-md-7 d-flex flex-column justify-content-center align-items-start">
-                            <p>E-mail</p>
+                        <div class="col-sm-12 col-md-7 d-flex flex-column justify-content-center align-items-start">
+                            <p>E-mail:</p>
                         </div>
-                        <div class="col-md-5 d-flex flex-column justify-content-center align-items-end">
+                        <div class="col-sm-12 col-md-5 d-flex flex-column justify-content-center align-items-end content-small">
                             {% if cliente.correo == '' %}
                             <span>-</span>
                             {% else %}
@@ -125,10 +137,10 @@
             <li class="list-group-item articulo">
                 <div class="container-fluid">
                     <div class="row d-flex flex-row align-items-center">
-                        <div class="col-md-7 d-flex flex-column justify-content-center align-items-start">
-                            <p>Dirección</p>
+                        <div class="col-sm-12 col-md-7 d-flex flex-column justify-content-center align-items-start">
+                            <p>Dirección:</p>
                         </div>
-                        <div class="col-md-5 d-flex flex-column justify-content-center align-items-end">
+                        <div class="col-sm-12 col-md-5 d-flex flex-column justify-content-center align-items-end content-small">
                             {% if cliente.direccion == '' %}
                             <span>-</span>
                             {% else %}

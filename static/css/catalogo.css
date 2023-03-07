@@ -56,3 +56,45 @@ img, .default-image {
     font-size: 0.9em;
     font-weight: normal;
 }
+.label-small {
+    display: none !important;
+}
+@media (max-width: 768px) {
+    .card {
+        margin: 30px 0;
+        padding: 15px 5px;
+    }
+    .articulo {
+        padding: 20px 0;
+    }
+    .heading {
+        display: none;
+    }
+    .list-group-item:nth-child(2) {
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+        border-top: 1px solid rgba(0, 0, 0, 0.125);
+    }
+    .label-small {
+        display: block !important;
+    }
+    .label-small p {
+        text-align: left;
+        color: #004a98;
+        font-weight: 500;
+        margin: 20px 0 0;
+    }
+    .content-small {
+        align-items: start !important;
+    }
+    .content-small span {
+        text-align: left;
+    }
+    img, .default-image {
+        margin: 0;
+    }
+    .card-footer {
+        padding: 2rem 1rem 1rem;
+        text-align: left;
+    }
+}
