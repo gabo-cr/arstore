@@ -3,7 +3,7 @@ from django.utils import timezone
 
 class Encabezado(models.Model):
     numeroOrden = models.CharField(blank=False, null=False, max_length=50)
-    total = models.TextField(null=False)
+    total = models.FloatField(null=False)
     fechaRegistro = models.DateTimeField(null=False)
     moneda = models.CharField(blank=False, null=False, max_length=15)
     fechaActualizacion = models.DateTimeField(null=True)
@@ -17,8 +17,8 @@ class Detalle(models.Model):
     sku = models.CharField(blank=False, null=False, max_length=50)
     nombre = models.TextField(blank=False, null=False)
     cantidad = models.IntegerField(blank=False, null=False, default=0)
-    precio = models.TextField(null=False)
-    total = models.TextField(null=False)
+    precio = models.FloatField(null=False)
+    total = models.FloatField(null=False)
     product_id = models.CharField(null=True, max_length=50)
     imagenURI = models.TextField(null=True)
 
