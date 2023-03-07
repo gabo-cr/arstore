@@ -35,6 +35,8 @@ def compras(request):
 
     numOrdenesDB = Encabezado.objects.count()
     numOrdenesShopify = countOrdersFromShopify()
+    print(f'numOrdenesDB: {numOrdenesDB}')
+    print(f'numOrdenesShopify: {numOrdenesShopify}')
     if numOrdenesDB < numOrdenesShopify:
         loaded = loadAllOrdenesFromShopifyToDB()
     

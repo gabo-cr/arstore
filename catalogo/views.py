@@ -13,17 +13,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-orderbyMap = {
-    'nom': 'nombre',
-    'can': 'cantidad',
-    'act': 'ultimaFechaActualizacion'
-}
 
 def catalogo(request):
     template = 'catalogo/catalogo.html'
     
     default_page = 1
     page = request.GET.get('page', default_page)
+    orderbyMap = {
+        'nom': 'nombre',
+        'can': 'cantidad',
+        'act': 'ultimaFechaActualizacion'
+    }
     default_orderby = 'act'
     orderby = request.GET.get('orderby', default_orderby)
     orderbyField = orderbyMap[orderby]
@@ -33,6 +33,8 @@ def catalogo(request):
 
     numArticulosDB = Articulo.objects.count()
     numArticulosShopify = countProductsFromShopify()
+    print(f'numArticulosDB: {numArticulosDB}')
+    print(f'numArticulosShopify: {numArticulosShopify}')
     if numArticulosDB < numArticulosShopify:
         loaded = loadAllArticulosFromShopifyToDB()
     
@@ -66,16 +68,23 @@ def webhookProduct(request):
 
     return HttpResponse()
 
+@csrf_exempt
+def webhookProductDelete(request):
+    data = request.body
+    verified = verifyWebhook(data, request.headers['X-Shopify-Hmac-SHA256'])
+    if not verified:
+        return HttpResponseBadRequest()
+
+    deleteProductFromDB(json.loads(data))
+
+    return HttpResponse()
+
 def verifyWebhook(data, hmac_header):
     digest = hmac.new(env.str('CLIENT_SECRET').encode('utf-8'), data, digestmod=hashlib.sha256).digest()
     computed_hmac = base64.b64encode(digest)
 
     return hmac.compare_digest(computed_hmac, hmac_header.encode('utf-8'))
 
-
-def loadAllArticulosFromDB():
-    articulos = Articulo.objects.all()
-    return articulos
 
 def loadAllArticulosFromShopifyToDB():
     try:
@@ -86,7 +95,7 @@ def loadAllArticulosFromShopifyToDB():
         for p in productsDict:
             saveProductToDB(p)
     except Exception as e:
-        print(e)
+        print(f'Exception in loadAllArticulosFromShopifyToDB: {e}')
         return False
     finally:
         closeConnectionToShopify()
@@ -136,7 +145,17 @@ def saveProductToDB(product):
             log.save()
 
     except Exception as e:
-        print(e)
+        print(f'Exception in saveProductToDB: {e}')
+        return False
+    return True
+
+def deleteProductFromDB(product):
+    try:
+        articuloDB = Articulo.objects.get(product_id=product['id'])
+        articuloDB.delete()
+
+    except Exception as e:
+        print(f'Exception in deleteProductFromDB: {e}')
         return False
     return True
 
@@ -146,7 +165,7 @@ def countProductsFromShopify():
         openConnectionToShopify()
         count = shopify.Product.count()
     except Exception as e:
-        print(e)
+        print(f'Exception in countProductsFromShopify: {e}')
     finally:
         closeConnectionToShopify()
     return count
