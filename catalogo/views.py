@@ -13,18 +13,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
+orderbyMap = {
+    'nom': 'nombre',
+    'can': 'cantidad',
+    'act': 'ultimaFechaActualizacion'
+}
+
 def catalogo(request):
     template = 'catalogo/catalogo.html'
     
     default_page = 1
     page = request.GET.get('page', default_page)
+    default_orderby = 'act'
+    orderby = request.GET.get('orderby', default_orderby)
+    orderbyField = orderbyMap[orderby]
+    default_orderdir = 'desc'
+    orderdir = request.GET.get('orderdir', default_orderdir)
+    orderdirField = '-' if orderdir == 'desc' else ''
 
     numArticulosDB = Articulo.objects.count()
     numArticulosShopify = countProductsFromShopify()
     if numArticulosDB < numArticulosShopify:
         loaded = loadAllArticulosFromShopifyToDB()
     
-    articulos = Articulo.objects.all().order_by('-ultimaFechaActualizacion')
+    articulos = Articulo.objects.all().order_by(str(orderdirField)+str(orderbyField))
     articulos_per_page = 5
     paginator = Paginator(articulos, articulos_per_page)
 
@@ -37,7 +49,9 @@ def catalogo(request):
     
     context = {
         'articulos_page': articulos_page,
-        'totalArticulos': len(articulos)
+        'totalArticulos': len(articulos),
+        'orderby': orderby,
+        'orderdir': orderdir
     }
     return render(request, template, context)
 

@@ -13,6 +13,51 @@
 <div class="card shadow">
     <div class="card-body">
     {% if ordenes_page %}
+        <form action="{% url 'compras' %}" method="get" class="form-inline mb-4">
+            <div class="row d-flex flex-row align-items-start">
+                <div class="col-md-2">
+                    <label class="col-form-label">Ordenar por: </label>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select name="orderby" id="orderby" class="form-select">
+                            {% if orderby == 'num' %}
+                            <option value="num" selected>Número de orden</option>
+                            {% else %}
+                            <option value="num">Número de orden</option>
+                            {% endif %}
+                            {% if orderby == 'tot' %}
+                            <option value="tot" selected>Monto total</option>
+                            {% else %}
+                            <option value="tot">Monto total</option>
+                            {% endif %}
+                            {% if orderby == 'act' %}
+                            <option value="act" selected>Fecha de actualización</option>
+                            {% else %}
+                            <option value="act">Fecha de actualización</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3"">
+                    <select name="orderdir" id="orderdir" class="form-select">
+                        {% if orderdir == 'asc' %}
+                        <option value="asc" selected>Ascendente</option>
+                        {% else %}
+                        <option value="asc">Ascendente</option>
+                        {% endif %}
+                        {% if orderdir == 'desc' %}
+                        <option value="desc" selected>Descendente</option>
+                        {% else %}
+                        <option value="desc">Descendente</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="col-md-2"">
+                    <input type="submit" value="Ordenar" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
         <ul class="list-group">
             <li class="list-group-item articulo heading">
                 <div class="container-fluid">
@@ -73,7 +118,7 @@
         {% if ordenes_page.has_other_pages %}
         <div class="btn-group mt-4" role="group" aria-label="Item pagination">
             {% if ordenes_page.has_previous %}
-                <a href="?page={{ ordenes_page.previous_page_number }}" class="btn btn-outline-primary">&laquo;</a>
+                <a href="?orderby={{orderby}}&orderdir={{orderdir}}&page={{ ordenes_page.previous_page_number }}" class="btn btn-outline-primary">&laquo;</a>
             {% endif %}
 
             {% for page_number in ordenes_page.paginator.page_range %}
@@ -82,14 +127,14 @@
                         <span>{{ page_number }}</span>
                     </button>
                 {% else %}
-                    <a href="?page={{ page_number }}" class="btn btn-outline-primary">
+                    <a href="?orderby={{orderby}}&orderdir={{orderdir}}&page={{ page_number }}" class="btn btn-outline-primary">
                         {{ page_number }}
                     </a>
                 {% endif %}
             {% endfor %}
 
             {% if ordenes_page.has_next %}
-                <a href="?page={{ ordenes_page.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
+                <a href="?orderby={{orderby}}&orderdir={{orderdir}}&page={{ ordenes_page.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
             {% endif %}
         </div>
         {% endif %}

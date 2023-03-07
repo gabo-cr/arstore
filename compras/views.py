@@ -15,18 +15,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
+orderbyMap = {
+    'num': 'numeroOrden',
+    'tot': 'total',
+    'act': 'fechaActualizacion'
+}
+
 def compras(request):
     template = 'compras/compras.html'
 
     default_page = 1
     page = request.GET.get('page', default_page)
+    default_orderby = 'num'
+    orderby = request.GET.get('orderby', default_orderby)
+    orderbyField = orderbyMap[orderby]
+    default_orderdir = 'desc'
+    orderdir = request.GET.get('orderdir', default_orderdir)
+    orderdirField = '-' if orderdir == 'desc' else ''
 
     numOrdenesDB = Encabezado.objects.count()
     numOrdenesShopify = countOrdersFromShopify()
     if numOrdenesDB < numOrdenesShopify:
         loaded = loadAllOrdenesFromShopifyToDB()
     
-    ordenes = Encabezado.objects.all().order_by('-numeroOrden')
+    ordenes = Encabezado.objects.all().order_by(str(orderdirField)+str(orderbyField))
     ordenes_per_page = 10
     paginator = Paginator(ordenes, ordenes_per_page)
     
@@ -42,7 +54,9 @@ def compras(request):
     context = {
         'ordenes_page': ordenes_page,
         'currencySymbol': currencySymbol,
-        'totalOrdenes': len(ordenes)
+        'totalOrdenes': len(ordenes),
+        'orderby': orderby,
+        'orderdir': orderdir
     }
 
     return render(request, template, context)
@@ -110,7 +124,7 @@ def saveOrderToDB(orden):
         if len(ordenesDB) == 0:
             nuevaOrden, created = Encabezado.objects.get_or_create(
                 numeroOrden = orden['name'],
-                total = orden['total_price'],
+                total = float(orden['total_price']),
                 fechaRegistro = datetime.fromisoformat(orden['created_at']),
                 moneda = orden['currency'],
                 fechaActualizacion = datetime.fromisoformat(orden['updated_at']),
@@ -155,7 +169,7 @@ def saveOrderToDB(orden):
                         sku = item['sku'],
                         nombre = item['name'],
                         cantidad = item['quantity'],
-                        precio = item['price'],
+                        precio = float(item['price']),
                         total = float(item['price']) * float(item['quantity']),
                         product_id = item['product_id'],
                         imagenURI = imagenURI

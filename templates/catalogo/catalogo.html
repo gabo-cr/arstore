@@ -13,6 +13,51 @@
 <div class="card shadow">
     <div class="card-body">
     {% if articulos_page %}
+        <form action="{% url 'catalogo' %}" method="get" class="form-inline mb-4">
+            <div class="row d-flex flex-row align-items-start">
+                <div class="col-md-2">
+                    <label class="col-form-label">Ordenar por: </label>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select name="orderby" id="orderby" class="form-select">
+                            {% if orderby == 'nom' %}
+                            <option value="nom" selected>Descripción</option>
+                            {% else %}
+                            <option value="nom">Descripción</option>
+                            {% endif %}
+                            {% if orderby == 'can' %}
+                            <option value="can" selected>Cantidad</option>
+                            {% else %}
+                            <option value="can">Cantidad</option>
+                            {% endif %}
+                            {% if orderby == 'act' %}
+                            <option value="act" selected>Fecha de actualización</option>
+                            {% else %}
+                            <option value="act">Fecha de actualización</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3"">
+                    <select name="orderdir" id="orderdir" class="form-select">
+                        {% if orderdir == 'asc' %}
+                        <option value="asc" selected>Ascendente</option>
+                        {% else %}
+                        <option value="asc">Ascendente</option>
+                        {% endif %}
+                        {% if orderdir == 'desc' %}
+                        <option value="desc" selected>Descendente</option>
+                        {% else %}
+                        <option value="desc">Descendente</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="col-md-2"">
+                    <input type="submit" value="Ordenar" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
         <ul class="list-group">
             <li class="list-group-item articulo heading">
                 <div class="container-fluid">
@@ -47,15 +92,12 @@
                         </div>
                         <div class="col-md-5 d-flex flex-column justify-content-center align-items-center">
                             <span>{{articulo.nombre}}</span>
-                            <!--span>Descripción</span-->
                         </div>
                         <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
                             <span>{{articulo.cantidad}}</span>
-                            <!--span>Cantidad</span-->
                         </div>
                         <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
                             <span>{{articulo.ultimaFechaActualizacion|date:'d/m/Y'}}</span>
-                            <!--span>Última actualización</span-->
                         </div>
                     </div>
                 </div>
@@ -65,7 +107,7 @@
         {% if articulos_page.has_other_pages %}
         <div class="btn-group mt-4" role="group" aria-label="Item pagination">
             {% if articulos_page.has_previous %}
-                <a href="?page={{ articulos_page.previous_page_number }}" class="btn btn-outline-primary">&laquo;</a>
+                <a href="?orderby={{orderby}}&orderdir={{orderdir}}&page={{ articulos_page.previous_page_number }}" class="btn btn-outline-primary">&laquo;</a>
             {% endif %}
 
             {% for page_number in articulos_page.paginator.page_range %}
@@ -74,14 +116,14 @@
                         <span>{{ page_number }}</span>
                     </button>
                 {% else %}
-                    <a href="?page={{ page_number }}" class="btn btn-outline-primary">
+                    <a href="?orderby={{orderby}}&orderdir={{orderdir}}&page={{ page_number }}" class="btn btn-outline-primary">
                         {{ page_number }}
                     </a>
                 {% endif %}
             {% endfor %}
 
             {% if articulos_page.has_next %}
-                <a href="?page={{ articulos_page.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
+                <a href="?orderby={{orderby}}&orderdir={{orderdir}}&page={{ articulos_page.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
             {% endif %}
         </div>
         {% endif %}
