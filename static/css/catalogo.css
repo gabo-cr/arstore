@@ -94,7 +94,7 @@ img, .default-image {
         margin: 0;
     }
     .card-footer {
-        padding: 2rem 1rem 1rem;
+        padding: 1.5rem 0.5rem 1rem;
         text-align: left;
     }
 }
