@@ -135,3 +135,9 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Shopify variables
+SHOPIFY_SHOP_URL = env.str('SHOPIFY_SHOP_URL')
+SHOPIFY_API_VERSION = env.str('SHOPIFY_API_VERSION')
+SHOPIFY_ADMIN_API_ACCESS_TOKEN = env.str('SHOPIFY_ADMIN_API_ACCESS_TOKEN')
+CLIENT_SECRET = env.str('CLIENT_SECRET')

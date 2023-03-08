@@ -7,11 +7,13 @@ from datetime import datetime
 from django.http import HttpResponse, HttpResponseBadRequest 
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 
-#environ init
-BASE_DIR = Path(__file__).resolve().parent.parent
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+SHOPIFY_SHOP_URL = getattr(settings, 'SHOPIFY_SHOP_URL')
+SHOPIFY_API_VERSION = getattr(settings, 'SHOPIFY_API_VERSION')
+SHOPIFY_ADMIN_API_ACCESS_TOKEN = getattr(settings, 'SHOPIFY_ADMIN_API_ACCESS_TOKEN')
+CLIENT_SECRET = getattr(settings, 'CLIENT_SECRET')
 
 
 def catalogo(request):
@@ -80,7 +82,7 @@ def webhookProductDelete(request):
     return HttpResponse()
 
 def verifyWebhook(data, hmac_header):
-    digest = hmac.new(env.str('CLIENT_SECRET').encode('utf-8'), data, digestmod=hashlib.sha256).digest()
+    digest = hmac.new(str(CLIENT_SECRET).encode('utf-8'), data, digestmod=hashlib.sha256).digest()
     computed_hmac = base64.b64encode(digest)
 
     return hmac.compare_digest(computed_hmac, hmac_header.encode('utf-8'))
@@ -171,11 +173,7 @@ def countProductsFromShopify():
     return count
 
 def openConnectionToShopify():
-    shop_url = env.str('SHOPIFY_SHOP_URL')
-    api_version = env.str('SHOPIFY_API_VERSION')
-    token = env.str('SHOPIFY_ADMIN_API_ACCESS_TOKEN')
-    
-    api_session = shopify.Session(shop_url, api_version, token)
+    api_session = shopify.Session(SHOPIFY_SHOP_URL, SHOPIFY_API_VERSION, SHOPIFY_ADMIN_API_ACCESS_TOKEN)
     shopify.ShopifyResource.activate_session(api_session)
 
 def closeConnectionToShopify():

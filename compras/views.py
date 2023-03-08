@@ -9,23 +9,25 @@ from currency_symbols import CurrencySymbols
 from django.http import HttpResponse, HttpResponseBadRequest 
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 
-#environ init
-BASE_DIR = Path(__file__).resolve().parent.parent
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-orderbyMap = {
-    'num': 'numeroOrden',
-    'tot': 'total',
-    'act': 'fechaActualizacion'
-}
+SHOPIFY_SHOP_URL = getattr(settings, 'SHOPIFY_SHOP_URL')
+SHOPIFY_API_VERSION = getattr(settings, 'SHOPIFY_API_VERSION')
+SHOPIFY_ADMIN_API_ACCESS_TOKEN = getattr(settings, 'SHOPIFY_ADMIN_API_ACCESS_TOKEN')
+CLIENT_SECRET = getattr(settings, 'CLIENT_SECRET')
+
 
 def compras(request):
     template = 'compras/compras.html'
 
     default_page = 1
     page = request.GET.get('page', default_page)
+    orderbyMap = {
+        'num': 'numeroOrden',
+        'tot': 'total',
+        'act': 'fechaActualizacion'
+    }
     default_orderby = 'num'
     orderby = request.GET.get('orderby', default_orderby)
     orderbyField = orderbyMap[orderby]
@@ -97,7 +99,7 @@ def webhookOrderPaid(request):
     return HttpResponse()
 
 def verifyWebhook(data, hmac_header):
-    digest = hmac.new(env.str('CLIENT_SECRET').encode('utf-8'), data, digestmod=hashlib.sha256).digest()
+    digest = hmac.new(str(CLIENT_SECRET).encode('utf-8'), data, digestmod=hashlib.sha256).digest()
     computed_hmac = base64.b64encode(digest)
 
     return hmac.compare_digest(computed_hmac, hmac_header.encode('utf-8'))
@@ -195,11 +197,7 @@ def countOrdersFromShopify():
     return count
 
 def openConnectionToShopify():
-    shop_url = env.str('SHOPIFY_SHOP_URL')
-    api_version = env.str('SHOPIFY_API_VERSION')
-    token = env.str('SHOPIFY_ADMIN_API_ACCESS_TOKEN')
-    
-    api_session = shopify.Session(shop_url, api_version, token)
+    api_session = shopify.Session(SHOPIFY_SHOP_URL, SHOPIFY_API_VERSION, SHOPIFY_ADMIN_API_ACCESS_TOKEN)
     shopify.ShopifyResource.activate_session(api_session)
 
 def closeConnectionToShopify():
